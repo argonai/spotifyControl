@@ -1,0 +1,13 @@
+{
+  "Author": "Argonai",
+  "Name": "Spotify control",
+  "Punchline": "Control Spotify playback in-game.",
+  "Description": "A description that shows up in /xlplugins. List any major slash-command(s).",
+  "InternalName": "spoofy",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "Spotify",
+    "plugin",
+    "Music"
+  ]
+}

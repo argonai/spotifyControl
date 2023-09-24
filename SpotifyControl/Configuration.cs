@@ -1,5 +1,6 @@
 ﻿using Dalamud.Configuration;
 using Dalamud.Plugin;
+using SpotifyAPI.Web;
 using System;
 
 namespace SamplePlugin
@@ -8,6 +9,11 @@ namespace SamplePlugin
     public class Configuration : IPluginConfiguration
     {
         public int Version { get; set; } = 0;
+
+        public String clientId {get; set;} = string.Empty;
+
+        public PKCETokenResponse? token {get; set;}
+
 
         public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
 
