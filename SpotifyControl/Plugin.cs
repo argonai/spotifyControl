@@ -81,14 +81,38 @@ namespace SamplePlugin
 
         private void OnCommand(string command, string args)
         {
-            // in response to the slash command, just display our main ui
             MainWindow.IsOpen = true;
+            // in response to the slash command, just display our main ui
+            
         }
-        private void OnControl(String command, string args)
+        private async void OnControl(String command, string args)
         {
             // TODO: args voor control pane en command control, unified control klasse om te besturen, setting om image te tonen in pane
             // CLEAR ALL DATA BUTTON VOOR TESTING
-            MainWindow.IsOpen = true;
+            if(spotify!=null){
+                switch (args)
+            {
+                case "next":
+                    await spotify.Player.SkipNext();
+                    break;
+                case "play":
+                    await spotify.Player.ResumePlayback();
+                    break;
+                case "pause":
+                    await spotify.Player.PausePlayback();
+                    break;
+                case "playback":
+                    if(await spotify.Player.GetCurrentPlayback()!=null){
+                        await spotify.Player.ResumePlayback();
+                    } else{
+                        await spotify.Player.PausePlayback();
+                    }
+                    break;
+                default:
+                    MainWindow.IsOpen = true;
+                    break;
+            }
+            }
         }
 
         private void DrawUI()
@@ -142,7 +166,7 @@ namespace SamplePlugin
                 {
                     CodeChallenge = challenge,
                     CodeChallengeMethod = "S256",
-                    Scope = new List<string> { UserReadPrivate, PlaylistReadPrivate, PlaylistReadCollaborative, AppRemoteControl, UserModifyPlaybackState  }
+                    Scope = new List<string> { UserReadPrivate, PlaylistReadPrivate, PlaylistReadCollaborative, AppRemoteControl, UserModifyPlaybackState, UserReadPlaybackState  }
                 };
 
                 var uri = request.ToUri();
