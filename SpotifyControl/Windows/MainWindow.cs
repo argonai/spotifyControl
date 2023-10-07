@@ -15,7 +15,6 @@ namespace SamplePlugin.Windows;
 
 public class MainWindow : Window, IDisposable
 {
-    private TextureWrap goatImage;
     private Plugin plugin;
 
     private Exception? e;
@@ -29,7 +28,7 @@ public class MainWindow : Window, IDisposable
         Debug
     }
 
-    public MainWindow(Plugin plugin, TextureWrap goatImage) : base(
+    public MainWindow(Plugin plugin) : base(
         "My Amazing Window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints
@@ -38,13 +37,12 @@ public class MainWindow : Window, IDisposable
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
-        this.goatImage = goatImage;
         this.plugin = plugin;
     }
 
     public void Dispose()
     {
-        this.goatImage.Dispose();
+        
     }
 
     public override void Draw()
@@ -68,10 +66,6 @@ public class MainWindow : Window, IDisposable
 
         ImGui.Spacing();
 
-        ImGui.Text("Have a goat:");
-        ImGui.Indent(55);
-        ImGui.Image(this.goatImage.ImGuiHandle, new Vector2(this.goatImage.Width, this.goatImage.Height));
-        ImGui.Unindent(55);
     }
 
     private async void DrawAuthentication()

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using SpotifyAPI.Web.Auth;
 using static SpotifyAPI.Web.Scopes;
 using System.Collections.Generic;
+using Dalamud.Plugin.Services;
 
 namespace SamplePlugin
 {
@@ -22,21 +23,20 @@ namespace SamplePlugin
         private const string ControlCommand = "/spcontrol";
 
         private DalamudPluginInterface PluginInterface { get; init; }
-        private CommandManager CommandManager { get; init; }
+        private ICommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
-        public ChatGui Chat {get; private set;} = null!;
+
         public WindowSystem WindowSystem = new("Spotify control");
 
         public SpotifyClient? spotify;
 
         private static readonly EmbedIOAuthServer Server = new(new Uri("http://localhost:5543/callback"), 5543);
 
-        private ConfigWindow ConfigWindow { get; init; }
         private MainWindow MainWindow { get; init; }
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] CommandManager commandManager)
+            [RequiredVersion("1.0")] ICommandManager commandManager)
         {
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
@@ -48,10 +48,8 @@ namespace SamplePlugin
             var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "goat.png");
             var goatImage = this.PluginInterface.UiBuilder.LoadImage(imagePath);
 
-            ConfigWindow = new ConfigWindow(this);
-            MainWindow = new MainWindow(this, goatImage);
+            MainWindow = new MainWindow(this);
 
-            WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
             // Hier nieuwe commands toevoegen
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
@@ -73,7 +71,6 @@ namespace SamplePlugin
         {
             this.WindowSystem.RemoveAllWindows();
 
-            ConfigWindow.Dispose();
             MainWindow.Dispose();
 
             this.CommandManager.RemoveHandler(CommandName);
